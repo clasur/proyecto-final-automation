@@ -22,9 +22,7 @@ public class TestMain {
         webDriver.manage().window().maximize();
         bussinesLogic();
 
-       /* System.setProperty("webdriver.gecko.driver","resourses/geckodriver.exe");
-        webDriver = new FirefoxDriver();
-        bussinesLogic();*/
+
     }
 
     public void bussinesLogic(){
@@ -37,28 +35,16 @@ public class TestMain {
         WebElement linkFalabella = webDriver.findElement(By.xpath("//h3[contains(text(),'falabella.com | Todo lo que necesitas en un solo l')]"));
         linkFalabella.click();
 
-        WebElement inputSearchFalabella = webDriver.findElement(By.xpath("//input[@id='testId-SearchBar-Input']"));
-        inputSearchFalabella.sendKeys("ps4");
-        inputSearchFalabella.sendKeys(Keys.ENTER);
+        findByXPathAndIntro(webDriver, "//input[@id='testId-SearchBar-Input']","ps4" );
 
-        WebDriverWait wait = new WebDriverWait(webDriver, 10);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/section[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/img[1]")));
+        findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/section[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/img[1]" );
 
-        WebElement findItem = webDriver.findElement(By.xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/section[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/img[1]"));
-        findItem.click();
+        findByXPathAndClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/section[2]/div[2]/div[1]/div[2]/div[2]/div[3]/button[1]");
 
-        WebElement putBasquet = webDriver.findElement(By.xpath("/html[1]/body[1]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/section[2]/div[2]/div[1]/div[2]/div[2]/div[3]/button[1]"));
-        putBasquet.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]")));
-
-        WebElement keepBuy = webDriver.findElement(By.xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]"));
-        keepBuy.click();
+        findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]");
 
         findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","xbox" );
-       /* WebElement inputSearchFalabella2 = findByXPath(webDriver,);
-        inputSearchFalabella2.sendKeys("xbox");
-        inputSearchFalabella2.sendKeys(Keys.ENTER);*/
+
 
     }
 
@@ -71,6 +57,16 @@ public class TestMain {
         WebElement element = findByXPath(webDriver, xPath);
         element.sendKeys(word);
         element.sendKeys(Keys.ENTER);
+    }
+    void findByXPathAndClick(WebDriver webDriver, String xPath){
+        WebElement element = findByXPath(webDriver, xPath);
+        element.click();
+    }
+    void findByXPathAndWaitClick(WebDriver webDriver, String xPath){
+        WebDriverWait wait = new WebDriverWait(webDriver,10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xPath)));
+        findByXPathAndClick(webDriver, xPath);
+
     }
 
 }
