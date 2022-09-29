@@ -37,15 +37,29 @@ public class TestMain {
 
         findByXPathAndIntro(webDriver, "//input[@id='testId-SearchBar-Input']","ps4" );
 
+        String product = "Control Gamepad Ps4 Camuflado Azul";
+        //findByXPathAndWaitClick(webDriver,"(//b[contains(text(),\"Control Gamepad Ps4 Camuflado Azul\")]/ancestor::a)[1]" );
+        findByXPathAndWaitClick(webDriver,"(//b[contains(text(),'"+product+"')]/ancestor::a)[1]" );
+
+        findByXPathAndClick(webDriver,"//button[contains(text(),\"Agregar al Carro\")]");
+
+        findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]");
+
+        findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","xbox" );
+
         findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/section[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/img[1]" );
 
         findByXPathAndClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/section[2]/div[2]/div[1]/div[2]/div[2]/div[3]/button[1]");
 
         findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]");
 
-        findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","xbox" );
+        //findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","sega" );
 
+        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/section[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/a[1]/img[1]" );
 
+        //findByXPathAndClick(webDriver,"/html[1]/body[1]");
+
+        //findByXPathAndWaitClick(webDriver,"//a[@id='linkButton']");
     }
 
     WebElement findByXPath(WebDriver webDriver, String xPath){
