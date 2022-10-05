@@ -1,6 +1,6 @@
 package clasur.falabella.pageobject;
 
-import clasur.falabella.UtilHelper;
+import clasur.falabella.helper.UtilHelper;
 import org.openqa.selenium.WebDriver;
 
 public class PayFalabellaPage extends BasePage{

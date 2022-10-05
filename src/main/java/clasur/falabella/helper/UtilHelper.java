@@ -1,4 +1,4 @@
-package clasur.falabella;
+package clasur.falabella.helper;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -53,17 +53,14 @@ public class UtilHelper {
         WebDriverWait waitById = new WebDriverWait(webDriver, Duration.ofSeconds(waitSeconds));
         waitById.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
     }
-
-    private static void waitByXPath(WebDriver webDriver , String xpath) {
+    public static void waitByXPath(WebDriver webDriver , String xpath) {
         WebDriverWait waitByXPath = new WebDriverWait(webDriver, Duration.ofSeconds(waitSeconds));
         waitByXPath.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
-    private static WebElement findByXPath(WebDriver webDriver, String xPath){
+    public static WebElement findByXPath(WebDriver webDriver, String xPath){
         WebElement element = webDriver.findElement(By.xpath(xPath));
         return element;
     }
-
-
     private static WebElement findByName(WebDriver webDriver, String name){
         WebElement element = webDriver.findElement(By.name(name));
         return element;

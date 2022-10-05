@@ -1,8 +1,6 @@
 package clasur.falabella.pageobject;
 
-import clasur.falabella.UtilHelper;
-import jdk.jshell.execution.Util;
-import org.openqa.selenium.By;
+import clasur.falabella.helper.UtilHelper;
 import org.openqa.selenium.WebDriver;
 
 public class GooglePage extends BasePage {

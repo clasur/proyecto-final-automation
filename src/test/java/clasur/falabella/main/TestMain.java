@@ -1,6 +1,9 @@
 package clasur.falabella.main;
 
+import clasur.falabella.helper.ScreenShotHelper;
 import clasur.falabella.pageobject.*;
+import clasur.falabella.report.ReportManager;
+import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,30 +12,29 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
 public class TestMain {
-    private WebDriver webDriver;
-
-    @BeforeTest
-    public void preloadTest(){
-
+    private WebDriver webDriverChrome;
+    private WebDriver webDriverFirefox;
+    @BeforeMethod
+    public void preloadTest(ITestResult iTestResult) throws Exception {
+        ReportManager.init("Reports", "LoginSite");
+        ReportManager.getInstance().startTest(iTestResult.getMethod().getMethodName());
         System.setProperty("webdriver.chrome.driver","resourses/chromedriver.exe");
-        webDriver = new ChromeDriver();
-        //System.setProperty("webdriver.gecko.driver","resourses/geckodriver.exe");
-        //webDriver = new FirefoxDriver();
+        webDriverChrome = new ChromeDriver();
+        webDriverChrome.manage().window().maximize();
+        System.setProperty("webdriver.gecko.driver","resourses/geckodriver.exe");
+        webDriverFirefox = new FirefoxDriver();
         //Mazimize current window
-        webDriver.manage().window().maximize();
+        webDriverFirefox.manage().window().maximize();
 
     }
-
-
-    @Test
-    public void testMain() {
+    private void bussinesLogic(WebDriver webDriver){
         GooglePage googlePage = new GooglePage(webDriver);
         googlePage.gofalabella();
 
@@ -46,8 +48,9 @@ public class TestMain {
         amountWarrantyPage.goCarro();
 
         CarFalabellaPage carFalabellaPage = new CarFalabellaPage(webDriver);
+        Float[] prices = carFalabellaPage.validityValueProduct();
+        Assert.assertEquals(prices[0],prices[1]);
         carFalabellaPage.goDelivery();
-        //carFalabellaPage.increaseProductCount();
 
         DeliveryFalabellaPage deliveryFalabellaPage= new DeliveryFalabellaPage(webDriver);
         deliveryFalabellaPage.goPay();
@@ -57,52 +60,39 @@ public class TestMain {
 
     }
 
-    public void bussinesLogic(){
-      //  webDriver.get("https://www.google.com");
-
-        // 1. Buscar Falabella  en google
-        //findByNameAndWaitIntro(webDriver, "q", "falabella");
-
-        //WebElement inputSearch = webDriver.findElement(By.name("q"));
-        //inputSearch.sendKeys("falabella");
-        //inputSearch.sendKeys(Keys.ENTER);
-
-        // 2. Entrar a la pagina de Falabella.com(Chile)
-        //findByXPathAndWaitClick(webDriver,"//h3[contains(text(),'falabella.com | Todo lo que necesitas en un solo l')]" );
-
-        //WebElement linkFalabella = webDriver.findElement(By.xpath("//h3[contains(text(),'falabella.com | Todo lo que necesitas en un solo l')]"));
-        //linkFalabella.click();
-
-        //findByXPathAndIntro(webDriver, "//input[@id='testId-SearchBar-Input']","ps4" );
-
-        //String product = "Ps4";
-        //findByXPathAndWaitClick(webDriver,"(//b[contains(text(),\"Control Gamepad Ps4 Camuflado Azul\")]/ancestor::a)[1]" );
-        //findByXPathAndWaitClick(webDriver,"(//b[contains(text(),'"+product+"')]/ancestor::a)[1]" );
-        //findByXPathAndWaitClick(webDriver,"//b[contains(text(),'"+product+"')]" );
-
-        //findByXPathAndWaitClick(webDriver,"//button[contains(text(),'Agregar al Carro')]");
-
-        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]");
-
-        //findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","xbox" );
-
-        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/section[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/a[1]/img[1]" );
-
-        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/section[2]/div[2]/div[1]/div[2]/div[2]/div[3]/button[1]");
-
-        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/button[1]");
-
-        //findByXPathAndIntro(webDriver, "/html[1]/body[1]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/input[1]","sega" );
-
-        //findByXPathAndWaitClick(webDriver,"/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/section[2]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/a[1]/img[1]" );
-
-        //findByXPathAndClick(webDriver,"/html[1]/body[1]");
-
-        //findByXPathAndWaitClick(webDriver,"//a[@id='linkButton']");
+    @Test
+    public void testMain() {
+        bussinesLogic(webDriverChrome);
+        bussinesLogic(webDriverFirefox);
     }
+    @AfterMethod
+    public void detroyTest(ITestResult iTestResult){
+        try {
+            switch (iTestResult.getStatus()){
+                case ITestResult.FAILURE:
+                    ReportManager.getInstance().getTest().log(Status.FAIL, "Test failed");
+                    break;
+                case ITestResult.SKIP:
+                    ReportManager.getInstance().getTest().log(Status.SKIP, "Test skipped");
+                    break;
+                case ITestResult.SUCCESS:
+                    ReportManager.getInstance().getTest().log(Status.PASS, "Test passed");
+                    break;
+                default:
+                    ReportManager.getInstance().getTest().log(Status.FAIL, "Test incomplete");
+            }
 
-    @AfterTest
-    public void detroyTest(){
+            if(iTestResult.getStatus() != ITestResult.SUCCESS && iTestResult.getThrowable() != null){
+                ReportManager.getInstance().getTest().log(Status.FAIL, iTestResult.getThrowable().getMessage());
+                ScreenShotHelper.takeScreenShotAndAdToHTMLReport(webDriverChrome, Status.FAIL, "Failure Image");
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if(webDriverChrome != null)
+                webDriverChrome.quit();
+        }
+        ReportManager.getInstance().flush();
     }
 }
